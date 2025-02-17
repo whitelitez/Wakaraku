@@ -3,7 +3,7 @@ import streamlit as st
 # ---------- PAGE CONFIG ----------
 st.set_page_config(
     page_title="High-End Japanese Hotel - Pricing Calculator",
-    page_icon="和楽",
+    page_icon="warakulogo.png",
     layout="centered"
 )
 
