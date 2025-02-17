@@ -106,7 +106,7 @@ def apply_discount(base_price, discount_str):
     return max(discounted_price, 0)
 
 # ---------- TITLE ----------
-st.title("高級温泉旅館 料金計算システム")
+st.title("和楽 料金計算システム")
 st.markdown("**すべて税込でご入力ください。** 大人・子供の人数と、それぞれが希望する食事オプション・追加料金を入力します。")
 
 # ====================
