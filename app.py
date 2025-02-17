@@ -116,9 +116,9 @@ st.markdown("**すべて税込でご入力ください。** 大人・子供の�
 st.subheader("1. 大人料金")
 col1, col2 = st.columns(2)
 with col1:
-    adult_base_str = st.text_input("大人1名あたりの基本料金 (税込)", value="30000")
+    adult_base_str = st.text_input("大人1名あたりの基本料金 (税込)", value="0")
 with col2:
-    adult_discount_str = st.text_input("大人向け割引 (例: '10%' or '¥2000')", value="10%")
+    adult_discount_str = st.text_input("大人向け割引 (例: '10%' or '¥2000')", value="0")
 
 num_adults = st.number_input("大人の人数", min_value=0, value=2)
 
@@ -126,9 +126,9 @@ num_adults = st.number_input("大人の人数", min_value=0, value=2)
 st.subheader("2. 子供料金")
 col3, col4 = st.columns(2)
 with col3:
-    child_base_str = st.text_input("子供1名あたりの基本料金 (税込)", value="15000")
+    child_base_str = st.text_input("子供1名あたりの基本料金 (税込)", value="0")
 with col4:
-    child_discount_str = st.text_input("子供向け割引 (例: '5%' or '¥1000')", value="5%")
+    child_discount_str = st.text_input("子供向け割引 (例: '5%' or '¥1000')", value="0")
 
 num_children = st.number_input("子供の人数", min_value=0, value=1)
 
