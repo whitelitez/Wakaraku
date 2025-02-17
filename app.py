@@ -140,22 +140,22 @@ st.subheader("3. 食事オプション（大人）")
 with st.expander("大人用の食事詳細を入力する"):
     colA1, colA2 = st.columns(2)
     with colA1:
-        adult_breakfast_str = st.text_input("朝食料金（大人1名あたり・税込）", value="3000")
-        adults_breakfast_count = st.number_input("朝食を希望する大人の人数", min_value=0, max_value=None, value=2)
+        adult_breakfast_str = st.text_input("朝食料金（大人1名あたり・税込）", value="0")
+        adults_breakfast_count = st.number_input("朝食を希望する大人の人数", min_value=0, max_value=None, value=0)
     with colA2:
-        adult_dinner_str = st.text_input("夕食料金（大人1名あたり・税込）", value="5000")
-        adults_dinner_count = st.number_input("夕食を希望する大人の人数", min_value=0, max_value=None, value=2)
+        adult_dinner_str = st.text_input("夕食料金（大人1名あたり・税込）", value="0")
+        adults_dinner_count = st.number_input("夕食を希望する大人の人数", min_value=0, max_value=None, value=0)
 
 # ---------- MEALS: CHILDREN ----------
 st.subheader("4. 食事オプション（子供）")
 with st.expander("子供用の食事詳細を入力する"):
     colC1, colC2 = st.columns(2)
     with colC1:
-        child_breakfast_str = st.text_input("朝食料金（子供1名あたり・税込）", value="2000")
-        children_breakfast_count = st.number_input("朝食を希望する子供の人数", min_value=0, max_value=None, value=1)
+        child_breakfast_str = st.text_input("朝食料金（子供1名あたり・税込）", value="0")
+        children_breakfast_count = st.number_input("朝食を希望する子供の人数", min_value=0, max_value=None, value=0)
     with colC2:
-        child_dinner_str = st.text_input("夕食料金（子供1名あたり・税込）", value="3500")
-        children_dinner_count = st.number_input("夕食を希望する子供の人数", min_value=0, max_value=None, value=1)
+        child_dinner_str = st.text_input("夕食料金（子供1名あたり・税込）", value="0")
+        children_dinner_count = st.number_input("夕食を希望する子供の人数", min_value=0, max_value=None, value=0)
 
 
 # ====================
