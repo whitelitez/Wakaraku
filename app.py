@@ -97,13 +97,12 @@ def apply_discount(base_price, discount_str):
     """
     (is_percent, val) = parse_discount(discount_str)
     if is_percent:
-        # val is the percent
         discounted_price = base_price - (base_price * (val / 100.0))
     else:
-        # val is a currency amount
         discounted_price = base_price - val
 
     return max(discounted_price, 0)
+
 
 # ---------- TITLE ----------
 st.title("和楽 料金計算システム")
@@ -141,10 +140,10 @@ with st.expander("大人用の食事詳細を入力する"):
     colA1, colA2 = st.columns(2)
     with colA1:
         adult_breakfast_str = st.text_input("朝食料金（大人1名あたり・税込）", value="0")
-        adults_breakfast_count = st.number_input("朝食を希望する大人の人数", min_value=0, max_value=None, value=0)
+        adults_breakfast_count = st.number_input("朝食を希望する大人の人数", min_value=0, value=0)
     with colA2:
         adult_dinner_str = st.text_input("夕食料金（大人1名あたり・税込）", value="0")
-        adults_dinner_count = st.number_input("夕食を希望する大人の人数", min_value=0, max_value=None, value=0)
+        adults_dinner_count = st.number_input("夕食を希望する大人の人数", min_value=0, value=0)
 
 # ---------- MEALS: CHILDREN ----------
 st.subheader("4. 食事オプション（子供）")
@@ -152,68 +151,69 @@ with st.expander("子供用の食事詳細を入力する"):
     colC1, colC2 = st.columns(2)
     with colC1:
         child_breakfast_str = st.text_input("朝食料金（子供1名あたり・税込）", value="0")
-        children_breakfast_count = st.number_input("朝食を希望する子供の人数", min_value=0, max_value=None, value=0)
+        children_breakfast_count = st.number_input("朝食を希望する子供の人数", min_value=0, value=0)
     with colC2:
         child_dinner_str = st.text_input("夕食料金（子供1名あたり・税込）", value="0")
-        children_dinner_count = st.number_input("夕食を希望する子供の人数", min_value=0, max_value=None, value=0)
+        children_dinner_count = st.number_input("夕食を希望する子供の人数", min_value=0, value=0)
 
 
 # ====================
 # 3) ADDITIONAL CHARGES
 # ====================
-# 
-# We give the user the ability to add multiple line items for both adults and children.
-# Each line item has: Name, Cost (free text, no discount), Quantity.
-
 st.subheader("5. 追加料金 (Extra Charges)")
 
 # ---------- ADULT ADDITIONAL CHARGES ----------
 with st.expander("大人向けの追加料金"):
-    st.markdown("下記に大人用の追加料金を入力してください。割引は適用されません。")
+    st.markdown("下記に大人用の追加料金を入力してください。**割引を含む場合は% または ¥ で入力**。")
 
-    # Let user specify how many line items they want
     adult_extra_count = st.number_input("大人向け追加項目の数", min_value=0, value=0, step=1)
 
-    # We’ll store them in a list of dicts or a simpler approach
     adult_extra_items = []
     for i in range(adult_extra_count):
-        st.write(f"**追加項目 #{i+1}**")
-        col_ex1, col_ex2, col_ex3 = st.columns([2,1,1])
+        st.write(f"**追加項目 #{i+1} (大人)**")
+        col_ex1, col_ex2, col_ex3, col_ex4 = st.columns([2,1,1,1])
         with col_ex1:
-            extra_name = st.text_input(f"項目名 (大人) - {i+1}", value="", key=f"adult_extra_name_{i}")
+            extra_name = st.text_input(f"項目名", value="", key=f"adult_extra_name_{i}")
         with col_ex2:
             extra_cost_str = st.text_input(f"料金 (円)", value="0", key=f"adult_extra_cost_{i}")
         with col_ex3:
             extra_qty = st.number_input(f"数量", min_value=0, value=1, key=f"adult_extra_qty_{i}")
+        with col_ex4:
+            extra_discount_str = st.text_input("割引 (例: '10%' or '¥500')", value="0", 
+                                               key=f"adult_extra_discount_{i}")
         
-        # Save in list for calculation
         adult_extra_items.append({
             "name": extra_name,
             "cost_str": extra_cost_str,
-            "qty": extra_qty
+            "qty": extra_qty,
+            "discount_str": extra_discount_str
         })
 
 # ---------- CHILD ADDITIONAL CHARGES ----------
 with st.expander("子供向けの追加料金"):
-    st.markdown("下記に子供用の追加料金を入力してください。割引は適用されません。")
+    st.markdown("下記に子供用の追加料金を入力してください。**割引を含む場合は% または ¥ で入力**。")
 
     child_extra_count = st.number_input("子供向け追加項目の数", min_value=0, value=0, step=1)
 
     child_extra_items = []
     for i in range(child_extra_count):
-        st.write(f"**追加項目 #{i+1}**")
-        col_ex1, col_ex2, col_ex3 = st.columns([2,1,1])
+        st.write(f"**追加項目 #{i+1} (子供)**")
+        col_ex1, col_ex2, col_ex3, col_ex4 = st.columns([2,1,1,1])
         with col_ex1:
-            extra_name = st.text_input(f"項目名 (子供) - {i+1}", value="", key=f"child_extra_name_{i}")
+            extra_name = st.text_input(f"項目名", value="", key=f"child_extra_name_{i}")
         with col_ex2:
             extra_cost_str = st.text_input(f"料金 (円)", value="0", key=f"child_extra_cost_{i}")
         with col_ex3:
             extra_qty = st.number_input(f"数量", min_value=0, value=1, key=f"child_extra_qty_{i}")
+        with col_ex4:
+            extra_discount_str = st.text_input("割引 (例: '10%' or '¥300')", value="0", 
+                                               key=f"child_extra_discount_{i}")
         
         child_extra_items.append({
             "name": extra_name,
             "cost_str": extra_cost_str,
-            "qty": extra_qty
+            "qty": extra_qty,
+            "discount_str": extra_discount_str
         })
 
 
@@ -222,7 +222,9 @@ with st.expander("子供向けの追加料金"):
 # ====================
 btn_calculate = st.button("料金を計算する")
 if btn_calculate:
-    # 1) Room base & discount
+    # --------------------------------------------------
+    # 1) Room base & discount (EXISTING LOGIC - UNCHANGED)
+    # --------------------------------------------------
     adult_base_price = parse_price(adult_base_str)
     child_base_price = parse_price(child_base_str)
     final_adult_price = apply_discount(adult_base_price, adult_discount_str)
@@ -231,7 +233,9 @@ if btn_calculate:
     total_adult_cost = final_adult_price * num_adults
     total_child_cost = final_child_price * num_children
 
-    # 2) Meal costs (no discount in this example)
+    # --------------------------------------------------
+    # 2) Meal costs (EXISTING LOGIC - UNCHANGED)
+    # --------------------------------------------------
     adult_breakfast_price = parse_price(adult_breakfast_str)
     adult_dinner_price = parse_price(adult_dinner_str)
     child_breakfast_price = parse_price(child_breakfast_str)
@@ -242,19 +246,30 @@ if btn_calculate:
     total_child_meal_cost = (child_breakfast_price * children_breakfast_count) \
                             + (child_dinner_price * children_dinner_count)
 
-    # 3) Additional charges for adults
+    # --------------------------------------------------
+    # 3) Additional charges (ADULTS) - NOW WITH DISCOUNT
+    # --------------------------------------------------
     total_adult_extras = 0
     for item in adult_extra_items:
         cost_val = parse_price(item["cost_str"])
-        total_adult_extras += cost_val * item["qty"]  # No discount
+        # Apply per-item discount
+        discounted_cost = apply_discount(cost_val, item["discount_str"])
+        line_total = discounted_cost * item["qty"]
+        total_adult_extras += line_total
 
-    # 4) Additional charges for children
+    # --------------------------------------------------
+    # 4) Additional charges (CHILDREN) - NOW WITH DISCOUNT
+    # --------------------------------------------------
     total_child_extras = 0
     for item in child_extra_items:
         cost_val = parse_price(item["cost_str"])
-        total_child_extras += cost_val * item["qty"]
+        discounted_cost = apply_discount(cost_val, item["discount_str"])
+        line_total = discounted_cost * item["qty"]
+        total_child_extras += line_total
 
-    # Final Summation
+    # --------------------------------------------------
+    # 5) Final Summation
+    # --------------------------------------------------
     grand_total = (total_adult_cost + total_child_cost
                    + total_adult_meal_cost + total_child_meal_cost
                    + total_adult_extras + total_child_extras)
@@ -294,10 +309,22 @@ if btn_calculate:
         st.markdown("**大人 追加料金:**")
         for item in adult_extra_items:
             cost_val = parse_price(item["cost_str"])
-            line_total = cost_val * item["qty"]
-            st.write(
-                f"- {item['name']} : ¥{int(cost_val):,} × {item['qty']} = ¥{int(line_total):,}"
-            )
+            discounted_cost = apply_discount(cost_val, item["discount_str"])
+            line_total = discounted_cost * item["qty"]
+            # Show the original line with discount breakdown
+            if item["discount_str"] and item["discount_str"] != "0":
+                st.write(
+                    f"- {item['name']} : "
+                    f"**(割引前)** ¥{int(cost_val):,} → "
+                    f"**(割引後)** ¥{int(discounted_cost):,} "
+                    f"× {item['qty']}個 = ¥{int(line_total):,} "
+                    f" _(割引: {item['discount_str']})_"
+                )
+            else:
+                st.write(
+                    f"- {item['name']} : ¥{int(cost_val):,} "
+                    f"× {item['qty']} = ¥{int(line_total):,}"
+                )
         st.write(f"**大人 追加料金小計**: ¥{int(total_adult_extras):,}")
 
     # Additional Charges Subtotals (Children)
@@ -305,10 +332,22 @@ if btn_calculate:
         st.markdown("**子供 追加料金:**")
         for item in child_extra_items:
             cost_val = parse_price(item["cost_str"])
-            line_total = cost_val * item["qty"]
-            st.write(
-                f"- {item['name']} : ¥{int(cost_val):,} × {item['qty']} = ¥{int(line_total):,}"
-            )
+            discounted_cost = apply_discount(cost_val, item["discount_str"])
+            line_total = discounted_cost * item["qty"]
+            # Show the original line with discount breakdown
+            if item["discount_str"] and item["discount_str"] != "0":
+                st.write(
+                    f"- {item['name']} : "
+                    f"**(割引前)** ¥{int(cost_val):,} → "
+                    f"**(割引後)** ¥{int(discounted_cost):,} "
+                    f"× {item['qty']}個 = ¥{int(line_total):,} "
+                    f" _(割引: {item['discount_str']})_"
+                )
+            else:
+                st.write(
+                    f"- {item['name']} : ¥{int(cost_val):,} "
+                    f"× {item['qty']} = ¥{int(line_total):,}"
+                )
         st.write(f"**子供 追加料金小計**: ¥{int(total_child_extras):,}")
 
     # Grand Total
